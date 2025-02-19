@@ -1,16 +1,32 @@
 package kata;
 
+// import static org.hamcrest.Matchers.*;
+// import io.cucumber.java.en.Given;
+// import io.cucumber.java.en.Then;
+// import io.cucumber.java.en.When;
+// import io.restassured.response.Response;
+// import static io.restassured.RestAssured.given;
+// import static org.junit.jupiter.api.Assertions.assertEquals;
+// import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
 
 public class StepDefinitions {
 
     private static final String BASE_URL = "https://automationintesting.online/message/";
+    private Response response;
+    // private static final String MESSAGE_API_BASE_URL = BASE_URL + "message/";
+    // private static final String AUTH_API_BASE_URL = BASE_URL + "auth/";
 
     // Before
     @Given("the API base url is set")
     public void the_api_base_url_is_set() {
+        RestAssured.baseURI = BASE_URL;
     }
 
     // Before
@@ -18,20 +34,32 @@ public class StepDefinitions {
     public void i_am_authenticated() {
     }
 
+    // Scenario: Get all messages
     @Given("I want to count the messages received")
     public void i_want_to_count_the_messages_received() {
     }
 
+    // Scenario: Get all messages
     @When("I count the messages")
     public void i_count_the_messages() {
     }
 
+    // Scenario: Get all messages
     @When("there is more than one message")
     public void there_is_more_than_one_message() {
     }
 
+    // Scenario: Get all messages
     @Then("I should have several messages")
     public void i_should_have_several_messages() {
+        int messagesAmount = 7;
+        RestAssured.given()
+                .get("https://automationintesting.online/message/count")
+                .then()
+                .body("count", is(messagesAmount))
+                .and()
+                .log()
+                .all();
     }
 
     //
@@ -52,7 +80,10 @@ public class StepDefinitions {
     }
 
     @Then("the response status code should be {int}")
-    public void the_response_status_code_should_be(Integer int1) {
+    public void the_response_status_code_should_be(Integer statusCode) {
+        RestAssured.given()
+                .then()
+                .statusCode(statusCode);
     }
 
     //
