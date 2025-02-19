@@ -33,14 +33,15 @@ test data:
 - test data: Message API
 
 ## 👉 analysis
-- [x] list endpoints for
-  - https://automationintesting.online/booking/swagger-ui/index.html
-  - https://automationintesting.online/message/swagger-ui/index.html
+- [x] list API endpoints
 - [x] review [endpoints](doc/endpoints.md)
-- 👉 setup api test framework
-  - write bdd scenario
-  - step definitions
+- [x] setup api test framework
+- 👉 tools doc:
+  - cucumber/gherkin features
+  - rest assured features
 - define tests: show variation, cover enough test types
+- write BDD scenarios
+- implement step definitions
 
 ## setup
 - [x] install cucumber
