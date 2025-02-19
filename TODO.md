@@ -13,10 +13,6 @@
 
 ## implementation
 
-basic implementation setup:
-- gherkin scenario
-- rest assured step defs
-
 feature testing:
 - create: get, post + get
 - update: get, post + get, put + get
@@ -40,11 +36,11 @@ test data:
 - [x] list endpoints for
   - https://automationintesting.online/booking/swagger-ui/index.html
   - https://automationintesting.online/message/swagger-ui/index.html
-- review [endpoints](doc/endpoints.md)
-- define tests: show variation, cover enough test types
-- setup api test framework
+- [x] review [endpoints](doc/endpoints.md)
+- 👉 setup api test framework
   - write bdd scenario
   - step definitions
+- define tests: show variation, cover enough test types
 
 ## setup
 - [x] install cucumber
