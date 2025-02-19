@@ -8,10 +8,24 @@
 
 **steps:**
 - [implementation](#implementation)
+  - [auth API](#auth-api)
+  - [project](#project)
 - [👉 analysis](#-analysis)
+  - [message API](#message-api)
+  - [auth API](#auth-api-1)
 - [setup](#setup)
 
 ## implementation
+
+### auth API
+- implement login
+- implement logout
+- implement validate
+
+### project
+
+best practices:
+- cucumber anti-patterns: use AND
 
 feature testing:
 - create: get, post + get
@@ -36,12 +50,26 @@ test data:
 - [x] list API endpoints
 - [x] review [endpoints](doc/endpoints.md)
 - [x] setup api test framework
-- 👉 tools doc:
+- tools doc:
   - cucumber/gherkin features
   - rest assured features
-- define tests: show variation, cover enough test types
-- write BDD scenarios
-- implement step definitions
+- 👉 define tests: show variation, cover enough test types
+- implement
+
+### message API
+[message API](https://automationintesting.online/message/swagger-ui/index.html#/):
+- PUT /{id}/read
+- GET /
+- POST /
+- GET /{id}/
+- DELETE /{id}/
+- GET /count
+
+### auth API
+[auth API](https://automationintesting.online/auth/swagger-ui/index.html#/):
+- POST /validate: token
+- POST /logout
+- POST /login: username, password
 
 ## setup
 - [x] install cucumber
