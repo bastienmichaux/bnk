@@ -13,7 +13,7 @@ Feature: Message API
     # endpoint: GET /
     Scenario: Get all messages
         Given I want to get all messages
-        When I get all messages
+        When I request all messages
         Then I receive several messages
         And the response status code should be 200
 

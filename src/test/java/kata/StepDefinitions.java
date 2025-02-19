@@ -1,8 +1,11 @@
 package kata;
 
+// import static org.junit.matchers.JUnitMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -29,6 +32,16 @@ public class StepDefinitions {
     // Background
     @Given("I am authenticated")
     public void i_am_authenticated() {
+        AuthPayload authPayload = new AuthPayload("admin", "password123");
+
+        Response response = RestAssured.given()
+                .body(authPayload)
+                .contentType("application/json")
+                .post("https://restful-booker.herokuapp.com/auth");
+
+        String authResponse = response.getBody().print();
+
+        assertThat(authResponse, containsString("token"));
     }
 
     // Shared
@@ -49,6 +62,11 @@ public class StepDefinitions {
     // endpoint: GET /
     @When("I request all messages")
     public void i_get_all_messages() {
+        response = RestAssured.given()
+                .get(MESSAGE_API_BASE_URL);
+        int statusCode = response.getStatusCode();
+        // ResponseBody body = response.getBody();
+        assertThat(statusCode, is(200));
     }
 
     // Scenario: Get all messages
