@@ -8,19 +8,31 @@
 - show variation, cover enough test types
 
 **steps:**
-- [👉 implementation](#-implementation)
-- [analysis](#analysis)
 - [documentation](#documentation)
+- [👉 implementation](#-implementation)
+  - [message APi](#message-api)
+  - [auth API](#auth-api)
+  - [👉 functional testing](#-functional-testing)
+  - [nice to have](#nice-to-have)
+- [analysis](#analysis)
 - [setup](#setup)
+
+## documentation
+
+- [endpoints](doc/endpoints.md)
+- [Message API](doc/api.message.md)
+- [Auth API](doc/api.auth.md)
 
 ## 👉 implementation
 
-message API:
-- [x] base scenarios Gherkin
-- 👉 implement before all
-- implement after all
+### message APi
 
-auth API:
+- [x] base scenarios Gherkin
+- [x] before all: set base url
+- after all: auth logout
+
+### auth API
+
 - implement login
 - implement logout
 - implement validate
@@ -28,22 +40,25 @@ auth API:
 - test: check user is authenticated
 - test: not authenticated: check error 403
 
-step definitions:
-- implement before all
-- implement after all
+### 👉 functional testing
+
+framework:
 - methods:
-  - get request
+  - 👉 get request
   - post request
   - delete request
   - put request
 - response validation
+  - [x] is
+  - [x] greater or equal to
+- gherkin syntax:
+  - use expressions: string, int
+  - use data tables?
+  - use tags?
+  - before all: gherkin + RA
+  - after all: gherkin + RA
 
-gherkin features:
-- use expressions: string, int
-- use data tables?
-- use tags?
-
-feature testing:
+tests:
 - create: get, post + get
 - update: get, post + get, put + get
 - delete: get, post + get, delete + get
@@ -57,10 +72,15 @@ test data:
 - test data: Booking API
 - test data: Message API
 
-nice to have:
+### nice to have
+
 - best practices: cucumber anti-patterns: use AND
+- reporting config
+- javadoc
+- security testing
 
 ## analysis
+
 - [x] list API endpoints
 - [x] review [endpoints](doc/endpoints.md)
 - [x] setup api test framework
@@ -68,15 +88,9 @@ nice to have:
   - cucumber/gherkin features
   - rest assured features
 - [x] define tests: message API
-- 👉 implement step definitions
-
-## documentation
-- [endpoints](doc/endpoints.md)
-- [Message API](doc/api.message.md)
-- [Auth API](doc/api.auth.md)
 
 nice to have:
-- [Booking API](doc/api.booking.md)
+- define tests: [Booking API](doc/api.booking.md)
 
 ## setup
 - [x] install cucumber
