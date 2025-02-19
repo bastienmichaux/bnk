@@ -6,10 +6,14 @@ import io.cucumber.java.en.When;
 
 public class StepDefinitions {
 
+    private static final String BASE_URL = "https://automationintesting.online/message/";
+
+    // Before
     @Given("the API base url is set")
     public void the_api_base_url_is_set() {
     }
 
+    // Before
     @Given("I am authenticated")
     public void i_am_authenticated() {
     }

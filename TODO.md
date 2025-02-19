@@ -5,27 +5,43 @@
 - ra, cucumber features use
 - correct tests, checks
 - regular commits
+- show variation, cover enough test types
 
 **steps:**
-- [implementation](#implementation)
-  - [auth API](#auth-api)
-  - [project](#project)
-- [👉 analysis](#-analysis)
-  - [message API](#message-api)
-  - [auth API](#auth-api-1)
+- [👉 implementation](#-implementation)
+- [analysis](#analysis)
+- [documentation](#documentation)
 - [setup](#setup)
 
-## implementation
+## 👉 implementation
 
-### auth API
+message API:
+- [x] base scenarios Gherkin
+- 👉 implement before all
+- implement after all
+
+auth API:
 - implement login
 - implement logout
 - implement validate
+- authentication: make helper
+- test: check user is authenticated
+- test: not authenticated: check error 403
 
-### project
+step definitions:
+- implement before all
+- implement after all
+- methods:
+  - get request
+  - post request
+  - delete request
+  - put request
+- response validation
 
-best practices:
-- cucumber anti-patterns: use AND
+gherkin features:
+- use expressions: string, int
+- use data tables?
+- use tags?
 
 feature testing:
 - create: get, post + get
@@ -35,41 +51,32 @@ feature testing:
   - string: test some unhappy strings
   - dates: test some unhappy dates
 
-auth:
-- authentication: make helper
-- test: check user is authenticated
-- test: not authenticated: check error 403
-
 test data:
 - json schemas: Booking API
 - json schemas: Message API
 - test data: Booking API
 - test data: Message API
 
-## 👉 analysis
+nice to have:
+- best practices: cucumber anti-patterns: use AND
+
+## analysis
 - [x] list API endpoints
 - [x] review [endpoints](doc/endpoints.md)
 - [x] setup api test framework
 - tools doc:
   - cucumber/gherkin features
   - rest assured features
-- 👉 define tests: show variation, cover enough test types
-- implement
+- [x] define tests: message API
+- 👉 implement step definitions
 
-### message API
-[message API](https://automationintesting.online/message/swagger-ui/index.html#/):
-- PUT /{id}/read
-- GET /
-- POST /
-- GET /{id}/
-- DELETE /{id}/
-- GET /count
+## documentation
+- [endpoints](doc/endpoints.md)
+- [Message API](doc/api.message.md)
+- [Auth API](doc/api.auth.md)
 
-### auth API
-[auth API](https://automationintesting.online/auth/swagger-ui/index.html#/):
-- POST /validate: token
-- POST /logout
-- POST /login: username, password
+nice to have:
+- [Booking API](doc/api.booking.md)
 
 ## setup
 - [x] install cucumber
