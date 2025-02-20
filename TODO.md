@@ -33,7 +33,7 @@
 
 ### auth API
 
-- implement login
+- [x] implement login
 - implement logout
 - implement validate
 - authentication: make helper
@@ -44,29 +44,31 @@
 
 framework:
 - methods:
-  - 👉 get request
-  - post request
+  - [x] get request
+  - 👉 post request
   - delete request
   - put request
 - response validation
   - [x] is
   - [x] greater or equal to
+  - [x] JSON body
 - gherkin syntax:
-  - use expressions: string, int
+  - [x] use expressions: string, int
   - use data tables?
   - use tags?
   - before all: gherkin + RA
   - after all: gherkin + RA
 
 tests:
-- create: get, post + get
-- update: get, post + get, put + get
-- delete: get, post + get, delete + get
+- 👉 POST: create: get, post + get
+- PUT: update: get, post + get, put + get
+- DELETE: get, post + get, delete + get
 - test incorrect data: post, put
   - string: test some unhappy strings
   - dates: test some unhappy dates
 
 test data:
+- use Objects with `@JSONProperty` fields
 - json schemas: Booking API
 - json schemas: Message API
 - test data: Booking API
@@ -84,10 +86,10 @@ test data:
 - [x] list API endpoints
 - [x] review [endpoints](doc/endpoints.md)
 - [x] setup api test framework
+- [x] define tests: message API
 - tools doc:
   - cucumber/gherkin features
   - rest assured features
-- [x] define tests: message API
 
 nice to have:
 - define tests: [Booking API](doc/api.booking.md)
