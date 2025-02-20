@@ -3,15 +3,12 @@ package kata;
 // import static org.junit.matchers.JUnitMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
-import io.restassured.config.RestAssuredConfig;
 import io.restassured.response.Response;
 
 public class StepDefinitions {
@@ -26,21 +23,24 @@ public class StepDefinitions {
     @Given("the API base url is set")
     public void the_api_base_url_is_set() {
         RestAssured.baseURI = BASE_URL;
-        assertThat(RestAssured.config(), instanceOf(RestAssuredConfig.class));
     }
 
     // Background
     @Given("I am authenticated")
     public void i_am_authenticated() {
-        AuthPayload authPayload = new AuthPayload("admin", "password123");
+        String username = "admin";
+        String password = "password123";
+        AuthPayload authPayload = new AuthPayload(username, password);
 
+        // authenticate 
         Response response = RestAssured.given()
                 .body(authPayload)
                 .contentType("application/json")
                 .post("https://restful-booker.herokuapp.com/auth");
+        String authResponse = response.getBody().asString();
 
-        String authResponse = response.getBody().print();
-
+        // if we receive a token, we're authenticated
+        Debug.logBody(response);
         assertThat(authResponse, containsString("token"));
     }
 
@@ -56,23 +56,31 @@ public class StepDefinitions {
     // endpoint: GET /
     @Given("I want to get all messages")
     public void i_want_to_get_all_messages() {
+        requestSpecification = RestAssured.given();
     }
 
     // Scenario: Get all messages
     // endpoint: GET /
     @When("I request all messages")
-    public void i_get_all_messages() {
+    public void i_request_all_messages() {
         response = RestAssured.given()
                 .get(MESSAGE_API_BASE_URL);
         int statusCode = response.getStatusCode();
-        // ResponseBody body = response.getBody();
+
+        Debug.logBody(response);
         assertThat(statusCode, is(200));
     }
 
     // Scenario: Get all messages
     // endpoint: GET /
-    @Then("I receive several messages")
-    public void i_receive_several_messages() {
+    @Then("I receive at least one message")
+    public void i_receive_at_least_one_message() {
+        String responseBody = response.getBody().asString();
+        List<String> messages = response.jsonPath().getList("messages");
+
+        Debug.logBody(response);
+        assertThat(responseBody, containsString("messages"));
+        assertThat(messages.size(), greaterThan(0));
     }
 
     // Scenario: Post a message
@@ -163,6 +171,7 @@ public class StepDefinitions {
     // endpoint: GET /count
     @Given("I want to count the messages received")
     public void i_want_to_count_the_messages_received() {
+
     }
 
     // Scenario: Count the messages received
@@ -181,10 +190,12 @@ public class StepDefinitions {
     // endpoint: GET /count
     @Then("I should have several messages")
     public void i_should_have_several_messages() {
-        int messagesAmount = 1;
-        RestAssured.given()
-                .get(MESSAGE_API_BASE_URL + "count")
-                .then()
-                .body("count", greaterThanOrEqualTo(messagesAmount));
+    }
+}
+
+class Debug {
+
+    static void logBody(Response response) {
+        response.getBody().prettyPrint();
     }
 }

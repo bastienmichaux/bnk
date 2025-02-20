@@ -14,7 +14,7 @@ Feature: Message API
     Scenario: Get all messages
         Given I want to get all messages
         When I request all messages
-        Then I receive several messages
+        Then I receive at least one message
         And the response status code should be 200
 
 
