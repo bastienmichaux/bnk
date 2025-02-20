@@ -6,11 +6,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
@@ -21,7 +23,7 @@ public class StepDefinitions {
 
     private static final String BASE_URL = "https://automationintesting.online/";
     private static final String MESSAGE_API_BASE_URL = BASE_URL + "message/";
-    private static final String AUTH_API_BASE_URL = BASE_URL + "auth/";
+    private static final String AUTH_API_BASE_URL = "https://restful-booker.herokuapp.com/auth";
 
     // Background
     @Given("the API base url is set")
@@ -38,31 +40,21 @@ public class StepDefinitions {
 
         // authenticate 
         Response response = RestAssured.given()
-                .body(authPayload)
                 .contentType("application/json")
-                .post("https://restful-booker.herokuapp.com/auth");
+                .body(authPayload)
+                .post(AUTH_API_BASE_URL);
         String authResponse = response.getBody().asString();
 
         // if we receive a token, we're authenticated
-        Debug.logBody(response);
         assertThat(authResponse, containsString("token"));
     }
 
     // Shared
     @Then("the response status code should be {int}")
-    public void the_response_status_code_should_be(Integer statusCode) {
+    public void the_response_status_code_should_be(int statusCode) {
         RestAssured.given()
                 .then()
                 .statusCode(statusCode);
-    }
-
-    // Shared
-    // Scenario: Delete a message
-    // endpoint: DELETE /{id}/
-    // Scenario: Post a message
-    // endpoint: POST /{id}/
-    @Given("the message ID is \\{int}")
-    public void the_message_id_is(int id) {
     }
 
     // Scenario: Get all messages
@@ -80,7 +72,6 @@ public class StepDefinitions {
                 .get(MESSAGE_API_BASE_URL);
         int statusCode = response.getStatusCode();
 
-        Debug.logBody(response);
         assertThat(statusCode, is(200));
     }
 
@@ -91,7 +82,7 @@ public class StepDefinitions {
         String responseBody = response.getBody().asString();
         List<String> messages = response.jsonPath().getList("messages");
 
-        Debug.logBody(response);
+        // Debug.logBody(response);
         assertThat(responseBody, containsString("messages"));
         assertThat(messages.size(), greaterThan(0));
     }
@@ -100,35 +91,55 @@ public class StepDefinitions {
     // endpoint: POST /
     @Given("I want to post a message")
     public void i_want_to_post_a_message() {
-        RestAssured.baseURI = BASE_URL;
+        RestAssured.baseURI = MESSAGE_API_BASE_URL;
     }
 
     // Scenario: Post a message
     // endpoint: POST /
     @When("I post a message")
     public void i_post_a_message() {
+        MessagePayload message = new MessagePayload(
+            "name",
+            "test@email.com",
+            "phone",
+            "subject",
+            "description"
+        );
+
+        response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body(message)
+                .when()
+                .post(RestAssured.baseURI + "/")
+                .then()
+                .log().all()
+                .and().extract().response();
+        response.prettyPrint();
+        assertEquals(201, response.statusCode());
     }
 
     // Scenario: Post a message
     // endpoint: POST /
     @Then("I should read the message")
     public void i_should_read_the_message() {
+        Debug.logBody(response);
+        assertEquals(201, response.statusCode());
     }
 
-    // endpoint: GET /{id}
     // Scenario: Get a message by ID
+    // endpoint: GET /{id}
     @Given("I want to get a message")
     public void i_want_to_get_a_message() {
     }
 
-    // endpoint: GET /{id}
     // Scenario: Get a message by ID
+    // endpoint: GET /{id}
     @When("I get the message")
     public void i_get_the_message() {
     }
 
-    // endpoint: GET /{id}
     // Scenario: Get a message by ID
+    // endpoint: GET /{id}
     @Then("I receive the message")
     public void i_receive_the_message() {
     }

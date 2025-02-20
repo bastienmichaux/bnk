@@ -29,7 +29,6 @@ Feature: Message API
     # endpoint: GET /{id}
     Scenario: Get a message by ID
         Given I want to get a message
-        And the message ID is {int}
         When I get the message
         Then I receive the message
         And the response status code should be 200
@@ -45,7 +44,6 @@ Feature: Message API
     # endpoint: DELETE /{id}/
     Scenario: Delete a message
         Given I want to delete a message
-        And the message ID is {int}
         When I delete the message
         Then I should not find the message
         And the response status code should be 200
