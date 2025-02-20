@@ -1,8 +1,10 @@
 package kata;
 
-// import static org.junit.matchers.JUnitMatchers.*;
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 
 import io.cucumber.java.en.Given;
@@ -10,10 +12,12 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 
 public class StepDefinitions {
 
     private Response response;
+    private RequestSpecification requestSpecification;
 
     private static final String BASE_URL = "https://automationintesting.online/";
     private static final String MESSAGE_API_BASE_URL = BASE_URL + "message/";
@@ -52,11 +56,20 @@ public class StepDefinitions {
                 .statusCode(statusCode);
     }
 
+    // Shared
+    // Scenario: Delete a message
+    // endpoint: DELETE /{id}/
+    // Scenario: Post a message
+    // endpoint: POST /{id}/
+    @Given("the message ID is \\{int}")
+    public void the_message_id_is(int id) {
+    }
+
     // Scenario: Get all messages
     // endpoint: GET /
     @Given("I want to get all messages")
     public void i_want_to_get_all_messages() {
-        requestSpecification = RestAssured.given();
+        RestAssured.baseURI = BASE_URL;
     }
 
     // Scenario: Get all messages
@@ -87,6 +100,7 @@ public class StepDefinitions {
     // endpoint: POST /
     @Given("I want to post a message")
     public void i_want_to_post_a_message() {
+        RestAssured.baseURI = BASE_URL;
     }
 
     // Scenario: Post a message
@@ -147,12 +161,6 @@ public class StepDefinitions {
     // endpoint: DELETE /{id}/
     @Given("I want to delete a message")
     public void i_want_to_delete_a_message() {
-    }
-
-    // Scenario: Delete a message
-    // endpoint: DELETE /{id}/
-    @Given("the message ID is \\{int}")
-    public void the_message_id_is() {
     }
 
     // Scenario: Delete a message
