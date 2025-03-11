@@ -1,144 +1,98 @@
 package kata;
 
-// import static org.hamcrest.Matchers.*;
-// import io.cucumber.java.en.Given;
-// import io.cucumber.java.en.Then;
-// import io.cucumber.java.en.When;
-// import io.restassured.response.Response;
-// import static io.restassured.RestAssured.given;
-// import static org.junit.jupiter.api.Assertions.assertEquals;
-// import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.is;
-
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
+import io.restassured.specification.RequestSpecification;
+
+import org.json.JSONObject;
+
+import io.restassured.http.ContentType;
 
 public class StepDefinitions {
 
-    private static final String BASE_URL = "https://automationintesting.online/message/";
-    private Response response;
-    // private static final String MESSAGE_API_BASE_URL = BASE_URL + "message/";
-    // private static final String AUTH_API_BASE_URL = BASE_URL + "auth/";
+    private final String BASE_URI = "https://automationintesting.online/message/";
 
-    // Before
-    @Given("the API base url is set")
-    public void the_api_base_url_is_set() {
-        RestAssured.baseURI = BASE_URL;
+    private RequestSpecification request = null;
+    private Response rawResponse = null;
+    private ValidatableResponse response = null;
+    private JSONObject payload = null;
+
+    @Given("I want to count all available messages")
+    public void i_want_to_count_all_available_messages() {
+        RestAssured.baseURI  = BASE_URI;
     }
 
-    // Before
-    @Given("I am authenticated")
-    public void i_am_authenticated() {
+    @When("I count all the messages")
+    public void i_count_all_the_messages() {
+        request = RestAssured.given();
+        rawResponse = request.get();
     }
 
-    // Scenario: Get all messages
-    @Given("I want to count the messages received")
-    public void i_want_to_count_the_messages_received() {
+    @Then("I receive the correct amount of messages")
+    public void i_receive_the_correct_amount_of_messages() {
+        response = rawResponse.then();
+        rawResponse.prettyPrint();
     }
 
-    // Scenario: Get all messages
-    @When("I count the messages")
-    public void i_count_the_messages() {
+    @And("the HTTP status line is {string}")
+    public void the_http_status_line_is(String line) {
+        response.statusLine("HTTP/1.1 200 OK");
     }
 
-    // Scenario: Get all messages
-    @When("there is more than one message")
-    public void there_is_more_than_one_message() {
+    @And("the HTTP response status is {int}")
+    public void the_http_response_status_is(Integer status) {
+        response.statusCode(200);
     }
 
-    // Scenario: Get all messages
-    @Then("I should have several messages")
-    public void i_should_have_several_messages() {
-        int messagesAmount = 7;
-        RestAssured.given()
-                .get("https://automationintesting.online/message/count")
-                .then()
-                .body("count", is(messagesAmount))
-                .and()
-                .log()
-                .all();
+    /*************************************************************************/
+
+    @Given("I want to send a message to the reception")
+    public void i_want_to_send_a_message_to_the_reception() {
+        // declare POST body
+        RestAssured.baseURI = "https://automationintesting.online/message/";
+        payload = new JSONObject();
+        payload.put("name", "Some Name");
+        payload.put("subject", "my subject");
     }
 
-    //
-    @Given("I want to delete a message")
-    public void i_want_to_delete_a_message() {
+    @And("my email is a valid email")
+    public void my_email_is_a_valid_email() {
+        payload.put("email", "valid@email.com");
     }
 
-    @Given("the message ID is \\{int}")
-    public void the_message_id_is() {
+    @And("my phone number is valid")
+    public void my_phone_number_is_valid() {
+        payload.put("phone", ("00" + "23456789012"));
     }
 
-    @When("I delete the message")
-    public void i_delete_the_message() {
+    @And("my message is valid")
+    public void my_message_is_valid() {
+        payload.put("description", "my description is longer than 20 characters 2");
     }
 
-    @Then("I should not find the message")
-    public void i_should_not_find_the_message() {
+    @When("I send the message")
+    public void i_send_the_message() {
+        // specify POST request
+        request = RestAssured.given();
+        request.contentType(ContentType.JSON);
+        request.body(payload.toString());
+
+        // execute POST request
+        rawResponse = request.post();
+        rawResponse.prettyPrint();
     }
 
-    @Then("the response status code should be {int}")
-    public void the_response_status_code_should_be(Integer statusCode) {
-        RestAssured.given()
-                .then()
-                .statusCode(statusCode);
+    @Then("the reception should have received the message")
+    public void the_reception_should_have_received_the_message() {
+        response = rawResponse.then();
+        rawResponse.prettyPrint();
+        response.statusCode(201);
     }
 
-    //
-    @Given("I want to get a message")
-    public void i_want_to_get_a_message() {
-    }
-
-    @When("I get the message")
-    public void i_get_the_message() {
-    }
-
-    @Then("I receive the message")
-    public void i_receive_the_message() {
-    }
-
-    //
-    @Given("I want to get all messages")
-    public void i_want_to_get_all_messages() {
-    }
-
-    @When("I get all messages")
-    public void i_get_all_messages() {
-    }
-
-    @Then("I receive several messages")
-    public void i_receive_several_messages() {
-    }
-
-    //
-    @Given("I want to mark a message as read")
-    public void i_want_to_mark_a_message_as_read() {
-    }
-
-    @When("I read a message")
-    public void i_read_a_message() {
-    }
-
-    @When("the message hasnt been read")
-    public void the_message_hasnt_been_read() {
-    }
-
-    @Then("the message status should have changed")
-    public void the_message_status_should_have_changed() {
-    }
-
-    //
-    @Given("I want to post a message")
-    public void i_want_to_post_a_message() {
-    }
-
-    @When("I post a message")
-    public void i_post_a_message() {
-    }
-
-    @Then("I should read the message")
-    public void i_should_read_the_message() {
-    }
+    /*************************************************************************/
 }
